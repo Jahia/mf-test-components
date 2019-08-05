@@ -1,6 +1,1749 @@
+<nt = 'http://www.jcp.org/jcr/nt/1.0'>
+<mix = 'http://www.jcp.org/jcr/mix/1.0'>
+<jcr = 'http://www.jcp.org/jcr/1.0'>
+<j = 'http://www.jahia.org/jahia/1.0'>
 <jmix = 'http://www.jahia.org/jahia/mix/1.0'>
 <jnt = 'http://www.jahia.org/jahia/nt/1.0'>
+<geo = 'http://www.europcar.com/europcar/geo/1.0'>
+<geomix = 'http://www.europcar.com/europcar/geo/mix/1.0'>
+<geont = 'http://www.europcar.com/europcar/geo/nt/1.0'>
+<ercmix = 'http://www.europcar.com/europcar/mix/1.0'>
+<ercnt = 'http://www.europcar.com/europcar/nt/1.0'>
+<fcnt = 'http://www.jahia.org/jahia/fc/nt/1.0'>
+<aah = 'http://www.aqua-aston.com/jahia/nt/1.0'>
+<aahmix = 'http://www.aqua-aston.com/jahia/mix/1.0'>
+<aahcmix = 'http://www.aqua-aston.com/core/jahia/mix/1.0'>
+<vbj = 'http://www.virbac.com/jahia/nt/1.0'>
 
 [jnt:persotest] > jnt:content, jmix:droppableContent, jmix:basicContent
  - text (string)
 
+[jnt:navMenu] > nt:base
+
+[fcnt:formDisplay] > nt:base
+  
+[jnt:choiceType] > jnt:content, jmix:editorialContent, jmix:structuredContent
+ - choiceField (string) mandatory
+ - type (string, choicelist[resourceBundle,typeInitializer]) mandatory
+ 
+[jmix:virbacContent] mixin
+
+[jmix:vetHpmComponents] > jmix:droppableContent, jmix:virbacContent mixin
+
+[jmix:typeEvent] > jmix:templateMixin mixin
+ extends = jnt:choiceType
+ - eventtype (string) mandatory
+
+[jmix:typeVideo] > jmix:templateMixin mixin
+ extends = jnt:choiceType
+ - commonVideoField (string) mandatory
+ - videotype (string, choicelist[resourceBundle,videoTypeInitializer]) mandatory
+
+[jmix:videoNormal] > jmix:templateMixin mixin
+ extends = jnt:choiceType
+ - normalKey (string) mandatory
+
+[jmix:videoYouTube] > jmix:templateMixin mixin
+ extends = jnt:choiceType
+ - youtubeKey (string) mandatory
+ 
+[aahcmix:core]  > jmix:droppableContent, jmix:editorialContent mixin
+
+[aahmix:userProfileContent] > jmix:droppableContent mixin
+
+[aahmix:outOfContextContent] > jmix:droppableContent mixin
+
+[aahcmix:performanceOptions] mixin
+ extends=jnt:virtualsite
+ itemtype=content
+ - turnOffCacheBuster (boolean) i18n
+
+[aahcmix:siteOptions] mixin
+ extends=jnt:virtualsite
+ itemtype=content
+ - searchPage (weakreference, picker[type='page'])
+ - temperatureUnits (string, choicelist[resourceBundle]) i18n < 'M', 'I'
+ - Copyright(string) i18n
+ - termsAndConditionsPage (weakreference, picker[type='page'])
+ - privacyPolicyPage (weakreference, picker[type='page'])
+ - siteLogo (weakreference, picker[type='image']) < 'jmix:image'
+ - bookPackagePage (weakreference, picker[type='page']) hidden
+ - bookPackageURL (string)
+ - favoritesFlyoutTitle (string)
+ - favoritesCtaText (string)
+ - favoritesCtaLinkText (string)
+ - supportNumber (string) i18n
+ - postActivatePage (weakreference, picker[type='page'])
+ - enableOAuthLogin (boolean)
+ - enableFavorites (boolean)
+ - needHelpPage (weakreference, picker[type='page'])
+
+[aahcmix:parametricOptions] mixin
+ extends=jnt:virtualsite
+ itemtype=content
+ - parametricPage (weakreference, picker[type='page'])
+ - destVal (string) i18n
+
+[aahmix:pageOptions] mixin
+ extends=jnt:page
+ itemtype=metadata
+ - alternateTitle(string) i18n
+ - noIndex (boolean)
+
+[jmix:mobileBreakpoints]  mixin
+ extends=jnt:imageReferenceLink
+ itemtype=content
+ - xsImg (weakreference, picker[type='image']) < 'jmix:image'
+ - smImg (weakreference, picker[type='image']) < 'jmix:image'
+ - mdImg (weakreference, picker[type='image']) < 'jmix:image'
+ - xlImg (weakreference, picker[type='image']) < 'jmix:image'
+ - picClass (string) i18n
+
+[aah:languageSwitcher] > jnt:content, aahcmix:core
+
+[aah:socialLinks] > jnt:content, aahcmix:core
+ + * (jnt:imageReferenceLink)
+
+[aah:insider] > jnt:content, aahcmix:core
+ + background (jnt:imageReferenceLink)
+ + logoImage (jnt:imageReferenceLink)
+ + insiderLinks (jnt:linkList)
+
+[aah:vacationInspirationCallout] > jnt:content, jmix:list, jmix:droppableContent, aahcmix:core
+ orderable
+ - mode (string, choicelist[resourceBundle]) mandatory nofulltext < 'latest', 'manual'
+ - headerText (string) i18n mandatory
+ - background (weakreference, picker[type='image']) i18n
+ + * (aah:vacationInspirationContentReference)
+
+[aahmix:vacationInspirationContent] > aahmix:h1Option mixin
+ extends=jnt:page
+ - displayDate (date) = now()
+ - viImage (weakreference,picker[type='image'])
+ // If you want more Vacation Inspiration Categories to show up in the filter, add them to the property: aahmix_vacationInspirationContent.typeList
+ - viCategory (string, choicelist[resourceBundle]) < 'activity','bestof','festival','itinerary','culinary','spotlight','traveltheme'
+ - viTitle (string) i18n
+ - viBlurb (string, richtext) i18n
+ - destinationPages (weakreference, picker[type='page']) multiple < 'aahmix:destinationPage'
+ - viAccentImage (weakreference,picker[type='image'])
+
+[aah:vacationInspirationContentReference] > jnt:content, jmix:nodeReference, aahcmix:core
+ - node (weakreference, picker[type='page']) i18n hidden < 'aahmix:vacationInspirationContent' 
+ - j:node (weakreference, picker[type='page']) i18n < 'aahmix:vacationInspirationContent' 
+
+[aahmix:media] mixin
+ + background (jnt:imageReferenceLink)
+ - video (weakreference, picker[type='file']) i18n
+ - youTubeURL (string) i18n
+ - overlayText (string) i18n
+ - overlaySubText (string) i18n
+
+[aah:feature] > jnt:content, jmix:droppableContent, aahmix:media, aahcmix:core, aahmix:h1Option
+ - showTemperature (boolean)
+ + * (jmix:link)
+
+[aah:utilityNav] > jnt:content, jmix:droppableContent, jmix:list, aahcmix:core
+ orderable
+ + * (aah:searchLink)
+ + * (aah:myAccountLink)
+ + * (jmix:link)
+
+[aah:carousel] > jnt:content, jmix:list, aahmix:h1Option, aahcmix:core
+ orderable
+ - header (string) i18n
+ + * (aah:story)
+ + * (jmix:link)
+
+[aah:imageCarousel] > jnt:content, aahcmix:core, jmix:list, aahmix:h1Option
+orderable
+ - header (string) i18n
+ - autoGeneration (string, choicelist[resourceBundle]) nofulltext < 'None', 'Activities', 'Destinations'
+ + * (jnt:imageReferenceLink)
+
+[aahmix:carouselTabs] mixin
+ extends=aah:carousel
+ - location (string, choicelist[resourceBundle]) nofulltext < 'top', 'bottom'
+ - numTabs (long) i18n
+  
+[vbj:virbacVetHpmProduct] > jnt:content, mix:title, jmix:list, jmix:renderableList, jmix:editorialContent
+ orderable
+ - jcr:title (string) i18n mandatory
+ - subTitle (string) i18n mandatory
+ - descriptionTitle (string) i18n 
+ - description (string, richtext) i18n
+ - picture (weakreference, picker[type='image']) mandatory
+ - healthConditions (string,choicelist[resourceBundle]) multiple nofulltext < 'neutered-overweight', 'neutered-notoverweight', 'notneutered-overweight', 'notneutered-notoverweight'
+ - productCondition (string,choicelist[resourceBundle]) nofulltext < 'weight','joint','gastro','dermato','allergy','kidney','urology'
+ - packaging (string,choicelist[resourceBundle]) mandatory multiple nofulltext < '0.4', '1.5', '3', '7', '12', '16'
+ - population (string, richtext) i18n mandatory
+ - chartProteinRate (Double) mandatory
+ - chartProteinLabel (string) nofulltext
+ - chartAnimalProteinRate (Double) mandatory
+ - chartAnimalProteinLabel (string) nofulltext
+ - chartCarbohydrateRate (Double) mandatory
+ - chartCarbohydrateLabel (string) nofulltext
+ - dailyFeed (string, richtext) i18n mandatory
+ - ingredients (string, richtext) i18n mandatory
+ - legalNotice (boolean) = true
+ - isNeutered (boolean) hidden
+ + * (vbj:virbacVetHpmProductBenefits) = vbj:virbacVetHpmProductBenefits version
+ + * (vbj:virbacVetHpmProductParagraph) = vbj:virbacVetHpmProductParagraph version
+  
+[vbj:virbacVetHpmProductBenefits] > jnt:content, mix:title
+ - jcr:title (string) i18n mandatory
+ - description (string) i18n mandatory
+ - videoId (string) i18n nofulltext
+  
+[vbj:virbacVetHpmProductParagraph] > jnt:content, mix:title, jmix:editorialContent
+ - jcr:title (string) i18n mandatory
+ - description (string, richtext) i18n
+
+[aah:searchLink] > jnt:content, aahcmix:core
+ - listItemClass (string)
+
+[aah:myAccountLink] > jnt:content, aahmix:userProfileContent
+ - signupPage (weakreference, picker[type='page'])
+ - profilePage (weakreference, picker[type='page'])
+
+[aah:userPreference] > jnt:content, mix:title
+ - question (string) nofulltext
+
+[aah:userPreferenceEdit] > jnt:content, jmix:listContent, jmix:list, jmix:renderableList, mix:title
+ - icon (string, choicelist[resourceBundle]) nofulltext < 'message', 'key', 'ribbon'
+ - emptyText (string) i18n
+ - buttonText (string) i18n
+ + * (aah:userPreferenceEditSection) = aah:userPreferenceEditSection version
+
+[aah:userPreferenceEditSection] > jnt:content, jmix:listContent, jmix:list, jmix:renderableList, mix:title
+ - tooltipText (string) i18n
+ + * (aah:userPreference) = aah:userPreference version
+
+[aah:userProfileHeader] > jnt:content, aahmix:userProfileContent
+ - welcomeText (string) i18n
+ - guestText (string) i18n
+ + background (jnt:imageReferenceLink)
+
+[aah:userProfileEdit] > jnt:content, aahmix:userProfileContent
+orderable
+ - travelCompanionEmptyText (string) i18n
+ - preferredCountries (string)
+ - excludedCountries (string)
+ + * (aah:userPreferenceEdit) = aah:userPreferenceEdit version
+
+[aah:userStays] > jnt:content, aahmix:userProfileContent
+ - showStays (string, choicelist[resourceBundle]) nofulltext < 'upcoming', 'past'
+ - noReservationsText (string) i18n mandatory
+ - thankYouText (string) i18n mandatory
+ - modifyReservationText (string) i18n mandatory
+
+[aah:favoritesCarousel] > jnt:content, mix:title, aahmix:userProfileContent, aahmix:h1Option
+ - travelLogDetailPage (weakreference, picker[type='page'])
+ - buttonText (string) i18n
+
+[aah:tabSet] > jnt:content, jmix:listContent, jmix:list, jmix:renderableList, aahcmix:core
+orderable
+ - activeTab (weakreference, choicelist[nodes='.;jnt:contentList'])
+ + * (jnt:contentList) = jnt:contentList version
+
+[aah:makeReservationButton] > jnt:content, aahcmix:core
+
+[aah:hotelSelector] > jnt:content, aahcmix:core
+orderable
+ + * (jnt:imageReferenceLink)
+ + * (jnt:linkList)
+ + * (aah:categoryReference)
+
+[aah:story] > jnt:content, jmix:list, aahcmix:core, aahmix:h1Option
+orderable
+ - headerText (string) i18n
+ - headerLink (weakreference, picker[type='page'])
+ - subHeaderText (string) i18n
+ - subHeaderLink (weakreference, picker[type='page'])
+ - description (string, textarea) i18n
+ - accentImg (weakreference, picker[type='image']) i18n
+ + * (jnt:imageReferenceLink)
+ + * (jmix:link)
+
+[aah:collage] > jnt:content, mix:title, aahcmix:core, aahmix:h1Option
+orderable
+ - description (string, richtext) i18n
+ - accentImg (weakreference, picker[type='image']) i18n
+ + * (jnt:imageReferenceLink)
+ + * (aah:video)
+ 
+ [aah:video] > jnt:content, aahcmix:core, aahmix:youtube, mix:title
+ - fileVideo (weakreference, picker[type='file']) i18n
+ - videoThumbnail (weakreference, picker[type='image']) i18n
+ 
+ [aahmix:youtube] mixin
+ - youTubeURL (string) ='https://' i18n
+  
+[aahcmix:destinationAutoGeneration] > aahmix:h1Option mixin
+ extends=aah:story
+ - destinationPage (weakreference, picker[type='page']) < 'aahmix:destinationPage'
+
+[aahcmix:propertyAutoGeneration] mixin
+ extends=aah:story
+ - propertyPage (weakreference, choicelist[nodes='$currentSite/contents/properties;aah:property'])
+
+[aah:searchBox] > jnt:content, jmix:droppableContent, aahcmix:core
+ - searchResultsPage (weakreference, picker[type='page'])
+
+[aah:aquaNavMenu] > jnt:navMenu, aahcmix:core
+ - allHotelsPage (weakreference, picker[type='page']) mandatory
+ - destinationsRootPage (weakreference, picker[type='page']) mandatory
+ - allHotelsImage1 (weakreference, picker[type='image'])
+ - allHotelsImage1Alt (string) i18n
+ - allHotelsImage2 (weakreference, picker[type='image'])
+ - allHotelsImage2Alt (string) i18n
+ - allHotelsImage3 (weakreference, picker[type='image'])
+ - allHotelsImage3Alt (string) i18n
+ - allHotelsImage4 (weakreference, picker[type='image'])
+ - allHotelsImage4Alt (string) i18n
+ - allHotelsPromoText (string) i18n
+ - hotelMenuTitle (string) = 'Hotels' i18n mandatory
+
+[aah:subPageListing] > jnt:navMenu, aahcmix:core
+ - j:baselineNode (string, choicelist) = 'currentPage' autocreated nofulltext hidden  < 'home', 'currentPage'
+ - j:maxDepth (long) = 0 hidden autocreated
+ - j:startLevel (long) = 0 hidden autocreated
+ - j:menuItemView (string) = 'subPageListingView' autocreated hidden nofulltext
+ - j:styleName (string) hidden nofulltext
+ - j:layoutID (string) hidden nofulltext
+
+[aahmix:destinationPage] > aahmix:mapPoint, aahmix:h1Option mixin
+ extends=jnt:page
+ - navPromoMode (string, choicelist[resourceBundle]) nofulltext < 'none', 'image', 'imageAndBadge'
+ - navPromoImage (weakreference, picker[type='image'])
+ - navPromoAlt (string) i18n
+ - navPromoText (string) i18n
+ - destinationPromoImage (weakreference, picker[type='image']) i18n
+ - promoText (string, richtext) i18n
+ - promoTextLayout (string, choicelist[resourceBundle]) nofulltext < 'content-top', 'content-middle', 'content-bottom'
+ - badge (weakreference, picker[type='image'])
+
+[aahmix:propertyPage] > aahmix:propertyLandingPage mixin
+ extends=jnt:page
+ - listOrder (long)
+ - feeInfoPage (weakreference, picker[type='page'])
+
+[aahmix:propertySubPage] > aahmix:h1Option mixin
+ extends=jnt:page
+ - featureImage (weakreference, picker[type='image']) i18n
+ - featureImageAltText (string) i18n
+ - subPageText (string) i18n
+ - buttonText (string) i18n
+
+ [aah:blurb] > jnt:content, mix:title, aahcmix:core, aahmix:h1Option
+  - description (string, richtext) i18n
+  - headerImg (weakreference, picker[type='image'])
+  - iconOne (weakreference, picker[type='image'])
+  - iconOneText (string) i18n
+  - iconTwo (weakreference, picker[type='image'])
+  - iconTwoText (string) i18n
+  - iconThree (weakreference, picker[type='image'])
+  - iconThreeText (string) i18n
+  - iconFour (weakreference, picker[type='image'])
+  - iconFourText (string) i18n
+  + alistButton (aah:alistButton)
+  + * (jmix:link)
+
+ [aah:alistButton] > jnt:content, aahcmix:core
+	-text (string) i18n
+	-loggedText (string) i18n
+  - profilePage (weakreference, picker[type='page'])
+  
+ [aahmix:sharingOptions] mixin
+ extends=jnt:page
+ itemtype=content
+ - showSharing (boolean)
+ - showSharingText (string) i18n
+
+[aahmix:promoPage] mixin
+ extends=jnt:page
+ - promoCode (string) i18n
+
+ [aahmix:favoriteOptions] mixin
+ extends=jnt:page
+ itemtype=content
+ - showFavorite (boolean)
+ - flyoutTitle (string) hidden
+ - ctaText (string) hidden
+ - ctaLinkText (string) hidden
+
+[aah:parametricSearch] > jnt:content, aahcmix:core
+ + destinationsMenu (aah:categoryMenu) = aah:categoryMenu autocreated
+ + amenitiesMenu (aah:amenitiesMenu) = aah:amenitiesMenu autocreated
+ + propertyTypeMenu (aah:categoryMenu) = aah:categoryMenu autocreated
+ + hoodMenu (aah:categoryMenu) = aah:categoryMenu autocreated
+ + hotelCollectionMenu (aah:categoryMenu) = aah:categoryMenu autocreated
+ + groupsEventsMenu (aah:categoryMenu) = aah:categoryMenu autocreated
+
+[aah:amenitiesMenu] > jnt:content
+ orderable
+ + * (aah:amenityContentReference)
+
+[aahmix:categoryIcon] mixin
+ extends=jnt:category
+ - icon (weakreference, picker[type='image']) mandatory i18n
+
+[aah:propertyTypeCategory] > jnt:category
+
+[aah:regionCategory] > jnt:category
+
+[aah:destinationCategory] > jnt:category
+
+[aah:neighborhoodCategory] > jnt:category
+
+[aah:collectionCategory] > jnt:category
+
+[aah:styleCategory] > jnt:category, aahmix:colorizedCategory
+
+[aah:groupsEventsCategory] > jnt:category
+
+[aah:categoryMenu] > jnt:content
+ orderable
+ + * (aah:categoryReference)
+
+[aah:categoryReference] > jnt:contentReference
+ - j:node (weakreference, picker[type='category']) i18n < 'jnt:category'
+
+[aah:promoCode] > jnt:content, jmix:hiddenType
+ - code (string) mandatory
+ - description (string) i18n
+
+[aah:property] > jnt:content, mix:title, aahmix:mapPoint, aahmix:barPricing, aahmix:propertyImages, aahmix:propertyDescriptions, aahmix:address, aahmix:propertyContactInfo, aahmix:tripAdvisor, jmix:siteContent, aahmix:outOfContextContent, aahmix:h1Option
+orderable
+ - synxisId (string)
+ - hotelCode (string)
+ - dailyAmenityFee (string)
+ - page (weakreference, picker[type='page']) mandatory i18n
+ - destinationPage (weakreference, picker[type='page']) i18n < 'aahmix:destinationPage'
+ - roomsLandingPage (weakreference, picker[type='page'])
+ - brand (weakreference, picker[type='editorial']) < 'aah:brand'
+ - url (string)
+ - urlPortal (string)
+ - checkInTime (string)
+ - checkOutTime (string)
+ - dateBorn (date, datepicker[format='MM/dd/yyyy'])
+ - aahStartDate (date, datepicker[format='MM/dd/yyyy'])
+ - timezone (string)
+ - totalRooms (long)
+ - managedRooms (long)
+ - numberOfElevators (long)
+ - numberOfFloors (long)
+ - tatLink (string)
+ - groupTypes (weakreference, picker[type='editorial']) multiple < 'aah:groupType'
+ + amenities (aah:amenitiesList) = aah:amenitiesList autocreated
+ + * (aah:roomType)
+
+ // TODO: fix timezone property type / constraints
+
+[aahmix:propertyImages] mixin
+ - gridImage (weakreference, picker[type='image']) mandatory i18n
+ - logo (weakreference, picker[type='image']) i18n
+ - logoBlack (weakreference, picker[type='image']) i18n
+ - photo (weakreference, picker[type='image']) i18n
+
+[aahmix:propertyDescriptions] mixin
+ - overviewPortal (string, textarea) i18n
+ - overview (string, textarea) i18n
+ - descriptionChannel (string) i18n
+ - shortDescription (string) i18n
+ - longDescription (string) i18n
+ - xlongDescription (string) i18n
+
+[aahmix:propertyContactInfo] mixin
+ - phoneNumber (string)
+ - reservationPhoneNumber (string)
+ - faxNumber (string)
+ - employees (weakreference, picker[type='editorial']) multiple < 'aah:propertyContact'
+
+[aahmix:propertyImageSlider] mixin
+ extends=aah:property
+ itemtype=content
+ - sliderImg1 (weakreference, picker[type='image'])
+ - sliderImg2 (weakreference, picker[type='image'])
+ - sliderPromoImg (weakreference, picker[type='image'])
+ 
+[aah:propertyOverview] > jnt:content, mix:title, aahcmix:core
+ orderable
+ + * (jnt:imageReferenceLink)
+ + * (aah:video)
+
+[aahmix:activityPage] mixin
+ extends=jnt:page
+ - activityPromoImage (weakreference, picker[type='image']) i18n
+
+[aah:listicleItem] > jnt:content, mix:title, aahcmix:core, aahmix:mapPoint, aahmix:h1Option
+ - headerText (string) i18n
+ - categoryText (string) i18n
+ - description (string, richtext) i18n
+ - image (weakreference, picker[type='image']) i18n
+ - imageAltText (string) i18n
+ + * (jmix:link)
+
+[aah:listicle] > jnt:content, mix:title, aahcmix:core, jmix:list, aahmix:h1Option
+ orderable
+ - headerText (string) i18n
+ + map (aah:genericMap)
+ + * (aah:listicleItem)
+ + * (aah:pagePromoBanner)
+
+[aahmix:accessibilityLink] mixin
+extends=jmix:link
+ - accessibilityText (string) i18n
+
+[aah:offerCarousel] > jnt:content, mix:title, jmix:list, aahcmix:core, aahmix:h1Option
+orderable
+ + * (aah:offerContentReference)
+ + * (jmix:link)
+
+[aah:offer] > jnt:content, mix:title, aahmix:outOfContextContent, aahmix:h1Option
+ - link (weakreference, picker[type='page'])
+ - image (weakreference, picker[type='image'])
+ - blurb (string, textarea) i18n
+ - promoted (boolean)
+ - validStart (date, datepicker[format='MM/dd/yyyy'])
+ - validEnd (date, datepicker[format='MM/dd/yyyy'])
+ - properties (weakreference, picker[type='editorial']) multiple < 'aah:property'
+ - synxisPromoCode (string) i18n
+
+[aah:offerContentReference] > jnt:content, jmix:nodeReference, aahcmix:core
+ - j:node (weakreference, picker[type='editorial']) i18n < 'aah:offer'
+
+[aah:discountDetailInfo] > jnt:content, aahcmix:core
+ - stayStart (date, datepicker[format='MM/dd/yyyy'])
+ - stayEnd (date, datepicker[format='MM/dd/yyyy'])
+ - bookBy (date, datepicker[format='MM/dd/yyyy'])
+ - terms (string, richtext) i18n
+ - promoCode (string) i18n
+
+
+[aah:anchorListNav] > jnt:content, aahcmix:core
+
+[aah:anchorPoint] > jnt:content, aahcmix:core, mix:title
+
+[aah:promoBanner] > jnt:content, aahcmix:core, aahmix:h1Option
+ - blurb (string, richtext) i18n
+ - buttonText (string) i18n
+ - buttonLink (weakreference, picker[type='page'])
+ - size (string, choicelist[resourceBundle]) nofulltext < 'col-md-4', 'col-md-8'
+ - promoImage (weakreference, picker[type='image'])
+
+[aah:pagePromoBanner] > jnt:content, aahcmix:core, aahmix:h1Option
+ - promoText (string) i18n
+ - promoSubText (string) i18n
+ - promoBodyText (string) i18n
+ - imageOne (weakreference, picker[type='image']) i18n
+ - imageTwo (weakreference, picker[type='image']) i18n
+ - imageThree (weakreference, picker[type='image']) i18n
+ + * (jmix:link)
+
+[aah:hotelPackage] > aah:offer, aahmix:h1Option
+
+[aah:listing] > jnt:content, mix:title, jmix:list, aahcmix:core, aahmix:h1Option
+orderable
+ - expandListButtonText (string) i18n
+ + * (aah:offerContentReference)
+ + * (aah:promoBanner)
+ + * (aah:hotelPackage)
+ 
+[aah:propertyList] > jnt:content, jmix:list, mix:title, aahcmix:core, aahmix:h1Option
+orderable
+ + * (aah:propertyContentReference)
+
+[aah:propertyContentReference] > jnt:content, jmix:nodeReference, aahcmix:core
+ - j:node (weakreference, picker[type='editorial']) < 'aah:property'
+ 
+[aahmix:colorizedCategory] mixin
+ extends=jnt:category
+ - tagClass (string, choicelist[resourceBundle]) mandatory < 'stylish','distinctive','family','budget'
+
+[aahmix:mapPoint] mixin
+ - latitude (string)
+ - longitude (string)
+ - mapImage (weakreference, picker[type='image']) i18n
+ - mapLink (weakreference, picker[type='page']) i18n
+ - mapDescription (string)
+
+[aah:orphanMapPoint] >jnt:content, aahmix:mapPoint, mix:title
+
+[aah:genericMap] > jnt:content, aahcmix:core
+ - headerText (string) i18n
+ - centerLongitude (string) i18n mandatory
+ - centerLatitude (string) i18n mandatory
+ + * (aah:orphanMapPoint)
+
+[aah:filteredPropertySearch] > jnt:content, mix:title, aahcmix:core
+
+[aah:offerPropertySearch] > jnt:content, mix:title, aahcmix:core, aahmix:h1Option
+ - offer (weakreference, picker[type='editorial']) < 'aah:offer'
+
+[aah:olapicCarousel] > jnt:content, mix:title, aahcmix:core, aahmix:h1Option
+ - hashtag (string) i18n
+ - viewGalleryText (string) i18n
+ - viewGalleryLink (weakreference, picker[type='page'])
+ - uploadPhotoText (string) i18n
+ - dataUrl (string) i18n
+
+[aah:alistCard] > jnt:content, aahcmix:core orderable
+ - icon (weakreference, picker[type='image']) mandatory i18n
+ - iconCount (string, choicelist[resourceBundle]) nofulltext < '0', '1', '2', '3', '4'
+ - text (string) multiple nofulltext hidden
+ + * (jnt:text)
+
+[aah:prCard] > jnt:content, mix:title, aahcmix:core orderable
+ - image (weakreference, picker[type='image']) mandatory i18n
+ - text (string) i18n
+ - subtext (string) i18n
+
+[aah:cardCarousel] > jnt:content, mix:title, aahcmix:core, jmix:list, aahmix:h1Option
+orderable
+ - blurb (string, richtext) i18n
+ - background (weakreference, picker[type='image']) i18n
+ + * (aah:alistCard)
+ + * (aah:prCard)
+ + alistButton (aah:alistButton)
+
+[aah:vacationInspirationFilter] > jnt:content, mix:title, jmix:list, aahmix:h1Option, aahcmix:core
+ orderable
+ - expandListButtonText (string) i18n
+ + * (aah:vacationInspirationContentReference)
+ + * (aah:vacationInspirationPromoCard)
+
+[aah:vacationInspirationPromoCard] > jnt:content, mix:title, jmix:editorialContent, aahmix:h1Option
+ - blurb (string, text) i18n
+ - buttonText (string) i18n
+ - buttonLink (weakreference, picker[type='page'])
+ - promoImage (weakreference, picker[type='image'])
+ 
+ [aah:iframe] > jnt:content, mix:title, jmix:structuredContent, jmix:siteComponent
+ - source (string) i18n indexed=no
+ - name (string) i18n indexed=no
+ - width (string) = '100%' i18n indexed=no
+ - height (string) = '100%' i18n indexed=no
+ - frameborder (boolean) indexed=no
+ - marginwidth (long) = '0' indexed=no
+ - marginheight (long) = '0' indexed=no
+ - scrolling (string, choicelist[resourceBundle]) i18n indexed=no < 'yes','no','auto'
+ - eventname (string) i18n indexed=no
+ 
+  [aahmix:pageResources] mixin
+ extends=jnt:page
+ itemtype=content
+  - cssFiles (weakreference, picker[type='file']) multiple
+  - jsHeadInternal (weakreference, picker[type='file']) multiple
+  - jsHeadExternal (string) multiple
+  - jsBodyInternal (weakreference, picker[type='file']) multiple
+  - jsBodyExternal (string) multiple
+  - addFilesToSubpages (boolean)
+  - disableCSSInEdit (boolean)
+  
+  [aahmix:siteResources] mixin
+ extends=jnt:virtualsite
+ itemtype=content
+  - cssFiles (weakreference, picker[type='file']) multiple
+  - jsHeadInternal (weakreference, picker[type='file']) multiple
+  - jsHeadExternal (string) multiple
+  - jsBodyInternal (weakreference, picker[type='file']) multiple
+  - jsBodyExternal (string) multiple
+
+[aahmix:openGraph] > aahmix:h1Option mixin
+ extends=jnt:page
+ itemtype=metadata
+ - og_title (string) i18n
+ - og_description (string) i18n
+ - og_image (weakreference, picker[type='image']) i18n multiple
+ - og_url (string) i18n
+ - searchResultHitType (string) i18n
+ - filterDestination (weakreference, picker[type='page']) multiple < 'aahmix:destinationPage'
+// If you want more Types to show up in the filter, add them to the property: aahmix_vacationInspirationContent.typeList
+ - filterType (string, choicelist[resourceBundle]) multiple < 'activity','bestof','festival','itinerary','culinary','spotlight','traveltheme'
+ - filterTheme (weakreference, choicelist[nodes='/sites/systemsite/categories/aah/aqua-themes;jnt:category']) multiple
+
+[aah:brand] > jnt:content, aahmix:outOfContextContent
+ - brandId (string)
+ - parentBrand (weakreference, picker[type='editorial']) < 'aah:brand'
+ - tagline (string) i18n
+ - brandCode (string) i18n
+ - description (string) i18n
+
+[aah:campaign] > jnt:content, aahmix:outOfContextContent
+ - promocode (string)
+ - discountPercent (double) i18n
+ - discountPercentTarget (string) i18n
+ - discountAmount (double) i18n
+ - discountAmountTarget (string) i18n
+ - packageAmount (double) i18n
+ - packageAmountTarget (string) i18n
+ - otherPromoType (string) i18n
+ - fromBookingDate (date, datepicker[format='MM/dd/yyyy'])
+ - toBookingDate (date, datepicker[format='MM/dd/yyyy'])
+ - fromStayDate (date, datepicker[format='MM/dd/yyyy'])
+ - toStayDate (date, datepicker[format='MM/dd/yyyy'])
+
+[aahmix:propertyCampaign] mixin
+extends=aah:campaign
+ - brand (weakreference, picker[type='editorial']) < 'aah:brand'
+ - optOutList (weakreference, picker[type='editorial']) multiple < 'aah:property'
+
+[aah:award] > jnt:content, mix:title, aahmix:outOfContextContent
+ - description (string)
+ - date (date, datepicker[format='MM/dd/yyyy'])
+ - sponsor (string)
+
+[aah:airport] > jnt:content, mix:title, aahmix:outOfContextContent
+ - airportCode (string)
+
+[aah:propertyContact] > jnt:content, aahmix:outOfContextContent
+ - name (string)
+ - phoneNumber (string)
+ - role (string)
+ - email (string)
+
+[aah:propertyContactMap] > jnt:content, aahcmix:core, aahmix:h1Option
+ - propertyRef (weakreference, picker[type='editorial']) < 'aah:property'
+
+[aah:amenity] > jnt:content, mix:title, aahmix:outOfContextContent
+ - icon (weakreference, picker[type='image']) i18n
+ - recommendationText (string) i18n
+
+[aah:amenityContentReference] > jnt:content, jmix:nodeReference, aahcmix:core
+ - j:node (weakreference, picker[type='editorial']) i18n < 'aah:amenity'
+ - isPropertyAmenity (boolean)
+
+[aah:roomType] > jnt:content, mix:title, aahmix:roomTypePromo, aahmix:barPricing, aahcmix:core, aahmix:outOfContextContent, aahmix:h1Option
+ orderable
+ - description (string, textarea)
+ - listingDescription (string, textarea)
+ - detailDescriptionHeader (string, textarea)
+ - detailDescription (string, textarea)
+ - floorPlan (weakreference, picker[type='image'])
+ - code (string)
+ - roomSize (string) i18n
+ - capacity (string)
+ - views (string) multiple i18n
+ - beddingString (string) i18n
+ - pmsRoomCode (string)
+ - synxisRoomCode (string)
+ - roomClass (string, choicelist[resourceBundle]) < 'deluxe', 'executive', 'handicap', 'moderate', 'other', 'standard', 'suite', 'superior'
+ - numberOfRooms (long)
+ + amenities (aah:amenitiesDisplayArea) autocreated
+ + * (jnt:imageReferenceLink)
+
+[aahmix:roomTypePromo] mixin
+ - promoImage (weakreference, picker[type='image']) i18n
+ - promoLine1 (string) i18n
+ - promoLine2 (string) i18n
+ - promoLine3 (string) i18n
+
+[aah:amenitiesDisplayArea] > jnt:content, mix:title, aahcmix:core
+ orderable
+ + * (aah:amenitiesList)
+
+[aah:amenitiesList] > jnt:content, mix:title, aahcmix:core
+ orderable
+ + * (aah:amenityContentReference)
+
+[aahmix:propertyLandingPage] mixin
+ - propertyRef (weakreference, picker[type='editorial']) < 'aah:property'
+
+[aah:roomsList] > jnt:content, aahcmix:core
+
+[aahmix:tripAdvisor] mixin
+ - locationId (string)
+ - ratingUrl (string)
+ - reviewCount (long)
+ - reviewsUrl (string)
+ - rating (double)
+ + * (aah:tripAdvisorReview)
+
+[aah:tripAdvisorReview] > jnt:content
+ - id (string) nofulltext
+ - title (string) nofulltext
+ - publishedDate (date) nofulltext
+ - rating (string) nofulltext
+ - ratingImageUrl (string) nofulltext
+ - url (string) nofulltext
+ - tripType (string) nofulltext
+ - travelDate (string) nofulltext
+ - text (string) nofulltext
+ - username (string) nofulltext
+ - userLocationId (string) nofulltext
+ - userLocationName (string) nofulltext
+
+[aah:accordion] > jnt:content, jmix:list, aahcmix:core
+orderable
+ + * (aah:accordionTab)
+
+[aah:accordionTab] > jnt:content, jmix:list, aahcmix:core, mix:title
+orderable
+ - statements (string) multiple i18n hidden nofulltext
+ + * (jnt:text)
+ + * (jnt:imageReferenceLink)
+
+[aahmix:badgedImage] mixin
+ extends=aah:roomType
+ - badgeText (string)
+
+[aahmix:personalGuidanceCategoryOption] mixin
+ extends=jnt:category
+ - guidanceImage (weakreference,picker[type='image'])
+
+[aahmix:personalGuidanceCategoryQuestion] mixin
+ extends=jnt:category
+ - pgwWeight (long)
+
+[aahmix:personalGuidanceQuestion] mixin
+ - headline
+
+[aahmix:categoryDescription] mixin
+ extends=jnt:category
+ - categoryDescription (string) i18n
+
+[aah:personalGuidanceImageQuestion] > jnt:content, jmix:editorialContent, aahmix:personalGuidanceQuestion, aahmix:h1Option
+ - selectionType (string, choicelist[resourceBundle]) mandatory nofulltext < 'radio','checkbox'
+ - category (weakreference, category) mandatory
+
+[aah:personalGuidanceBudgetQuestion] > jnt:content, jmix:editorialContent, aahmix:personalGuidanceQuestion, aahmix:h1Option
+ - lowBudget (weakreference, category) mandatory < 'aahmix:personalGuidanceCategoryOption'
+ - midBudget (weakreference, category) mandatory < 'aahmix:personalGuidanceCategoryOption'
+ - highBudget (weakreference, category) mandatory < 'aahmix:personalGuidanceCategoryOption'
+
+[aah:personalGuidanceWidget] > jnt:content, jmix:list, aahcmix:core, aahmix:h1Option
+orderable
+ + * (aahmix:personalGuidanceQuestion)
+ + background (jnt:imageReferenceLink)
+ - headline (string) i18n
+ - copy (string) i18n
+ - startButtonText (string) i18n
+ - resultsPage (weakreference, picker[type='page']) mandatory
+
+[aah:personalGuidanceResult] > jnt:content, aahcmix:core, aahmix:h1Option
+ - questionsPage (weakreference, picker[type='page']) mandatory
+ - otherOptionsText (string) i18n
+
+[aahmix:personalGuidanceDetailResultsPage] mixin
+extends=jnt:page
+ - destinationPage (weakreference, picker[type='page']) < 'aahmix:destinationPage'
+ - pgwPromoText (string, richtext) i18n
+
+[aah:personalGuidanceDetailResultsBlurb] > jnt:content, aahcmix:core
+ - bookButtonText (string) i18n
+ - questionsPage (weakreference, picker[type='page']) mandatory
+
+ [aah:experience] > jnt:content, aahcmix:core, aahmix:organizer, aahmix:address, aahmix:h1Option
+ - name (string) i18n
+ - date (date, datetimepicker[format='MM/dd/yyyy HH:mm']) = now()
+ - shortDescription (string, richtext) i18n
+ - description (string, richtext) i18n
+ - property (weakreference, choicelist[nodes='$currentSite/contents/properties;aah:property']) i18n
+ - image (weakreference, picker[type='image']) i18n
+ - onSite (boolean) i18n
+
+ [aahmix:organizer] mixin
+  - orgName (string) i18n
+  - orgPhone (string) i18n
+  - orgEmail (string) i18n
+
+ [aahmix:address] mixin
+ - locationName (string) i18n
+ - addr1 (string) i18n
+ - addr2 (string) i18n
+ - addrCity (string) i18n
+ - addrState (string, choicelist[resourceBundle]) i18n < AK,AL,AR,AZ,CA,CO,CT,DC,DE,FL,GA,HI,IA,ID,IL,IN,KS,KY,LA,MA,MD,ME,MI,MN,MO,MS,MT,NC,ND,NE,NH,NJ,NM,NY,NV,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VA,VT,WA,WV,WI,WY
+ - addrPostalCode (string) i18n
+ - neighborhood (string) i18n
+
+ [aah:experienceList] > jnt:content, aahcmix:core, aahmix:h1Option
+ - property (weakreference, choicelist[nodes='$currentSite/contents/properties;aah:property']) i18n
+
+[aah:propertyActivitesCarousel] > jnt:content, mix:title, aahmix:h1Option, aahcmix:core
+ + propertyRef (aah:propertyContentReference)
+
+ [aah:propertyFeature] > jnt:navMenu, aahcmix:core
+ + featureImg (jnt:imageReferenceLink)
+ - propertyOrSub (string, choicelist[resourceBundle]) < 'feature-property', 'feature-property-sub'
+
+[aah:dedicatedGallery] > jnt:content, jmix:list, aahcmix:core
+orderable
+ + * (aah:dedicatedGalleryGroup)
+
+[aah:dedicatedGalleryGroup] > jnt:content, mix:title, jmix:list, aahcmix:core, aahmix:h1Option
+orderable
+ + * (aah:video)
+ + * (jnt:imageReferenceLink)
+
+[aah:contactGroupings] > jnt:content, jmix:list, mix:title, aahcmix:core, aahmix:h1Option
+ orderable
+ + * (aah:contactGroup)
+
+[aah:contactGroup] > jnt:content, jmix:list, mix:title, aahcmix:core
+ orderable
+ + * (aah:propertyContactContentReference)
+
+[aah:propertyContactContentReference] > jnt:content, jmix:nodeReference, aahcmix:core
+ - j:node (weakreference, picker[type='editorial']) < 'aah:propertyContact'
+
+[aah:propertySlider] > jnt:content, aahcmix:core
+ orderable
+ + * (aah:video)
+ + * (jnt:imageReferenceLink)
+ + * (aah:roomTypeContentReference)
+
+[aah:roomTypeContentReference] > jnt:content, jmix:nodeReference, aahcmix:core
+- j:node (weakreference, picker[type='editorial']) i18n
+
+[aah:timeline] > jnt:content, mix:title, jmix:list, aahcmix:core, aahmix:h1Option
+ orderable
+ + * (aah:timelineEntry)
+
+[aah:timelineEntry] > jnt:content, mix:title, aahcmix:core
+ - text (string, richtext) i18n
+ - image (weakreference, picker[type='image']) i18n
+
+[aah:biographyGroup] > jnt:content, jmix:list, mix:title, aahcmix:core, aahmix:h1Option
+ orderable
+ - subtext (string, richtext) i18n
+ + * (aah:biography)
+
+[aah:biography] > jnt:content, mix:title, aahcmix:core
+ - bio (string, textarea) i18n
+ - quote (string, text) i18n
+ - portrait (weakreference, picker[type='image'])
+ - accentImage (weakreference, picker[type='image'])
+
+[aah:pressInquiries] > jnt:content, mix:title, aahcmix:core
+ - nameOne (string) i18n
+ - roleOne (string) i18n
+ - phoneOne (string) i18n
+ - emailOne (string) i18n
+ - nameTwo (string) i18n
+ - roleTwo (string) i18n
+ - phoneTwo (string) i18n
+ - emailTwo (string) i18n
+ - pdf (weakreference, picker[type='file']) i18n
+ - media (weakreference, picker[type='file']) i18n
+
+[aahmix:pressRelease] > aahmix:h1Option mixin
+ extends=jnt:page
+ - pressHomePageRef (weakreference, picker[type='page'])
+ - authorFirstName (string)
+ - authorLastName (string)
+ - publishDate (date, datepicker[format='MM/dd/yyyy']) = now()
+ - previewImage (weakreference, picker[type='image'])
+ - previewText (string, richtext) i18n
+ - relatedProperties (weakreference, picker[type='editorial']) multiple < 'aah:property'
+
+[aah:pressRelease] > jnt:content, jmix:layoutComponentContent, aahcmix:core, aahmix:h1Option
+ + * (jnt:contentList) = jnt:contentList version
+
+[aah:relatedPress] > jnt:content, mix:title, aahcmix:core
+
+[aah:pressReleaseFilter] > jnt:content, mix:title, aahcmix:core
+
+[aah:pressMediaLinksNav] > jnt:content, aahcmix:core
+ + blurb (jnt:bigText)
+ + links (jnt:linkList)
+
+[aah:groupType] > jnt:content, mix:title, aahcmix:core
+ - featureImage (weakreference, picker[type='image'])
+ - text (string, richtext) i18n
+
+[aah:groupTypeContentReference] > jnt:content, jmix:nodeReference, aahcmix:core
+ - j:node (weakreference, picker[type='editorial']) i18n < 'aah:groupType'
+
+[aah:groupTypesGrid] > jnt:content, jmix:list, mix:title, aahcmix:core, aahmix:h1Option
+ orderable
+ + * (aah:groupTypeContentReference)
+
+[aah:faqAccordion] > jnt:content, mix:title, aahcmix:core
+ + * (aah:faqCategory)
+
+[aah:faqCategory] > jnt:content, mix:title, aahcmix:core
+ + * (aah:faqSubCategory)
+
+[aah:faqSubCategory] > jnt:content, mix:title, aahcmix:core
+ + * (aah:faq)
+
+[aah:faq] > jnt:content, aahcmix:core
+ - question (string) i18n
+ - answer (string, richtext) i18n
+
+[aah:faqChatFooter] > jnt:content, aahcmix:core
+ - headerText (string) i18n
+ - subHeader (string) i18n
+ - phoneNumber (string) i18n
+
+[aah:formWrapper] > jnt:content, mix:title, aahcmix:core, aahmix:h1Option
+ - headerText (string) i18n
+ - subHeaderText (string) i18n
+ - image (weakreference, picker[type='image'])
+ + * (fcnt:formDisplay)
+
+[aah:searchResults] > jnt:content, mix:title, aahcmix:core
+ - helpPhone (string)
+ 
+[aah:amenityFilteredPropertyList] > jnt:content, mix:title, aahcmix:core, aahmix:h1Option
+ - amenities (weakreference, picker[type='editorial']) multiple < 'aah:amenity'
+
+[aah:hotelSchema] > jnt:content, aahcmix:core
+ - propertyRef (weakreference, choicelist[nodes='$currentSite/contents/properties;aah:property']) i18n
+
+[aah:gridrow] > jnt:content, aahcmix:core
+ - container (boolean)
+ - inset (boolean)
+ - class (string) i18n
+ - id (string) i18n
+ - layout (string, choicelist[resourceBundle]) i18n indexed=no < 'Full Width','Two Column','Three Column','Four Columns','Two-Thirds/One-Third','One-Third/Two-Thirds', 'One-Sixth/Five-Sixths', 'Quarter/Half/Quarter', 'Two/Eight/Two', 'One/Ten/One'
+ + * (jnt:contentList) = jnt:contentList version
+
+[aah:booknowButton] > jnt:content, aahcmix:core
+ - propertyRef (weakreference, choicelist[nodes='$currentSite/contents/properties;aah:property']) i18n mandatory
+ - promoCode (string) i18n
+ - buttonText (string) i18n
+ - buttonTrackingAttribute (string) mandatory
+
+[aahmix:barPricing] mixin
+ - barPrice (double) i18n
+
+[aahmix:h1Option] mixin
+ - h1Option (boolean)
+
+[aah:bookingWidget] > jnt:content, aahcmix:core, aahmix:h1Option
+ - buttonView (string, choicelist[resourceBundle]) indexed=no < 'bookNow', 'changeDates'
+
+[aah:descriptionCollage] > jnt:content, aahcmix:core, mix:title
+ - imageOne (weakreference, picker[type='image'])
+ - imageTwo (weakreference, picker[type='image'])
+ - accentImage (weakreference, picker[type='image'])
+ - description (string, richtext)
+ - showInset (boolean)
+
+[aah:pullQuote] > jnt:content, aahcmix:core
+ - quote (string, richtext) i18n
+
+[aah:povQuestionAnswer] > jnt:content, aahcmix:core
+ - question (string) i18n
+ - answer (string, richtext) i18n
+ - property (weakreference, picker[nodes='$currentSite/contents/properties;aah:property'])
+ - imageOne (weakreference, picker[type='image']) i18n
+ - imageOneAlt (string) i18n
+ - imageOneCaption (string) i18n
+ - imageTwo (weakreference, picker[type='image']) i18n
+ - imageTwoAlt (string) i18n
+ - buttonText (string) i18n
+ + * (aah:booknowButton)
+
+[aah:povIntro] > jnt:content, mix:title, aahcmix:core, aahmix:h1Option
+ - portrait (weakreference, picker[type='image'])
+ - bio (string, textarea) i18n
+
+[aah:itineraryBodyCopy] > jnt:content, aahcmix:core
+ - blurb (string, richtext) i18n
+ - badge (weakreference, picker[type='image']) i18n
+
+[aahmix:itineraryPage] mixin
+ extends=jnt:page
+ - itinerary (weakreference, picker[type='editorial',nodes='$currentSite/contents']) < 'aah:itinerary'
+
+[aah:itineraryPlaceholder] > jnt:content, jmix:droppableContent, jmix:hiddenType
+
+[aah:itineraryReference] > jnt:contentList, aahcmix:core
+ + placeholder (aah:itineraryPlaceholder) = aah:itineraryPlaceholder autocreated
+
+[aah:itinerary] > jnt:content, mix:title, jmix:editorialContent, aahmix:outOfContextContent
+ - dayOne (weakreference, picker[type='editorial']) < 'aah:itineraryDay'
+ - dayTwo (weakreference, picker[type='editorial']) < 'aah:itineraryDay'
+ - carouselImage (weakreference, picker[type='image'])
+ - destinationPage (weakreference, picker[type='page']) i18n < 'aahmix:destinationPage'
+
+[aah:itineraryDay] > jnt:content, jmix:list, mix:title, jmix:editorialContent, aahmix:outOfContextContent
+ orderable
+ + * (aah:itineraryItemReference) = aah:itineraryItemReference
+
+[aah:itineraryItemReference] > jnt:content
+ - itineraryItem (weakreference, picker[type='editorial']) < 'aah:itineraryItem'
+
+[aah:itineraryItem] > jnt:content, aahmix:outOfContextContent, aahmix:mapPoint, mix:title
+ - image (weakreference, picker[type='image']) i18n
+ - description (string, textarea) i18n
+ - directionButtonText (string) i18n
+ - localeButtonText (string) i18n
+ - localePage (weakreference, picker[type='page']) i18n < 'aahmix:destinationPage'
+
+[aah:itineraryOther] > jnt:content, mix:title, aahcmix:core, aahmix:h1Option
+ - viewAllPage (weakreference, picker[type='page'])
+ - filterDestination (weakreference, picker[type='page']) i18n < 'aahmix:destinationPage'
+// If you want more Types to show up in the filter, add them to the property: aahmix_vacationInspirationContent.typeList
+ - filterType (string, choicelist[resourceBundle]) = 'itinerary' < 'activity','bestof','festival','itinerary','culinary','spotlight','traveltheme'
+ - filterTheme (weakreference, choicelist[nodes='/sites/systemsite/categories/aqua-themes;jnt:category'])
+
+[aah:travelLogContainer] > jnt:content
+ + * (aah:travelLog)
+
+[aah:travelLog] > jnt:content, mix:title
+ - travelLogDestination (string)
+ - checkin (string)
+ - checkout (string)
+ + * (jnt:nodeLink)
+
+[aah:favoritesContainer] > jnt:content, aahcmix:core
+ orderable
+ - travelLogDetailPage (weakreference, picker[type='page'])
+ + * (jnt:imageReferenceLink)
+
+[aah:travelLogDetailContainer] > jnt:content, aahcmix:core
+ - favoritesPage (weakreference, picker[type='page'])
+ - shareable (boolean)
+
+[aahmix:hotelGridOptions] mixin
+ extends=aah:carousel
+ itemtype=content
+ - gridViewIcon (weakreference, picker[type='image'])
+ - gridViewTabName (string) i18n
+ - mapViewIcon (weakreference, picker[type='image'])
+ - mapViewTabName (string) i18n
+ - defaultView  (string, choicelist[resourceBundle]) = 'grid' nofulltext < 'grid', 'map'
+ 
+[ercmix:microappsComponents] > jmix:droppableContent mixin
+
+[ercnt:appBookingPod] > jnt:content, ercmix:microappsComponents
+
+[ercnt:contentApi] > jnt:content, jmix:studioOnly, jmix:autoPublish
+ 
+[ercmix:angular1Parameters] mixin  
+	extends = jnt:virtualsite
+	itemtype = options
+	- vendorJS (string)
+	- appJS (string)
+	
+[ercmix:angular2Parameters] mixin  
+	extends = jnt:virtualsite
+	itemtype = options
+	- inlineAngular2 (string)
+	- polyfillsAngular2 (string)
+	- vendorAngular2 (string)
+	
+[ercmix:baseHrefParameter] mixin  
+	extends = jnt:virtualsite
+	itemtype = options	
+	- baseHref (string)
+	- ngApp (string)
+ 
+[ercmix:displayPurgeVarnishUnderNode] mixin
+[ercmix:canBeFlushInVarnish] mixin
+
+[ercmix:visibleInLandingPageTree] mixin
+
+[ercmix:nameNotEditable] mixin
+
+[ercmix:visibleInGeoTree] mixin
+
+/* DEPRECATED Replaced by ercnt:labelRoot */
+[ercnt:labelSettings] > jnt:content, jmix:hiddenType, jmix:studioOnly, jmix:siteComponent
+
+/* DEPRECATED Replaced by ercnt:labelGroup */
+[ercnt:labelFolder] > jnt:content, jmix:hiddenType
+    + * (jnt:text)
+    + * (ercnt:labelFolder)
+
+[ercnt:labelRoot] > nt:base, ercmix:nameNotEditable, ercmix:visibleInLandingPageTree, jmix:systemNode
+    + * (ercnt:labelGroup)
+
+[ercnt:labelGroup] > nt:base, ercmix:nameNotEditable, jmix:systemNode
+    + * (ercnt:labelGroup)
+    + * (ercnt:label)
+
+[ercnt:label] > nt:base, ercmix:nameNotEditable, jmix:systemNode
+    - text (string) i18n mandatory
+
+[ercnt:reportFolder] > nt:base, ercmix:nameNotEditable
+    + * (ercnt:reportFolder)
+    + * (ercnt:report)
+
+[ercnt:report] > nt:base, ercmix:nameNotEditable
+    - duration (long) mandatory
+    - date (date) mandatory
+    - status (string, choicelist) mandatory protected < 'OK', 'WARNING', 'ERROR'
+    - report (string, textarea) protected
+    - sentByMail (boolean) protected
+    
+[ercmix:businessComponents] > jmix:droppableContent mixin
+
+[ercnt:termAndCondition] > jnt:bigText, ercmix:visibleInLandingPageTree, ercmix:businessComponents
+
+[ercmix:campaignGlobalSettings]
+    - contractID (string) < '\\d{0,8}'
+    - iataNumber (string) < '\\d{0,8}'
+    - vehicleTypes (string, choicelist) multiple mandatory < 'car', 'van', 'luxury'
+    - duration (string, choicelist) = 'permanent' mandatory < 'permanent','seasonal', 'onetime'
+    - liveDateFrom (date)
+    - liveDateTo (date)
+    - rentalDateFrom (date)
+    - rentalDateTo (date)
+    - bookingDateFrom (date)
+    - bookingDateTo (date)
+    - availableCountries (string, choicelist) multiple mandatory < 'FR', 'US', 'GB', 'BE', 'IT', 'ES', 'CH', 'DE'
+
+[ercmix:campaignListSettings]
+    - weight (long) i18n mandatory
+    - visibleOnTheSite (boolean)
+
+[ercmix:campaignVisualSettings]
+    - name (string) i18n mandatory
+    - description (string) i18n mandatory
+    - image (weakreference, picker[type='image']) i18n mandatory
+    - displayCountdown (boolean)
+
+[ercnt:campaign] > jnt:content, ercmix:campaignGlobalSettings, ercmix:campaignListSettings, ercmix:campaignVisualSettings, ercmix:businessComponents
+
+[ercnt:campaignVisibilityCondition] > jnt:condition
+
+[ercnt:campaignActiveCondition] > jnt:condition
+    - reverse (boolean)
+
+
+[ercnt:campaignGrid] > jnt:content, ercmix:iconTitleList, jmix:bindedComponent, ercmix:businessComponents
+    - filterVehicleTypes (string, choicelist) multiple < 'car', 'van', 'luxury'
+    + default (ercnt:campaignGridTemplate)
+    + * (ercnt:campaignGridTemplate)
+
+[ercnt:campaignGridTemplate] > jnt:content
+    + fix (ercnt:campaignGridRows) = ercnt:campaignGridRows autocreated
+    + recursive (ercnt:campaignGridRows) = ercnt:campaignGridRows autocreated
+
+[ercnt:campaignGridRows] > jnt:content
+    orderable
+    + * (ercnt:campaignGridRow)
+
+[ercnt:campaignGridRow] > jnt:content
+    - template (string, choicelist[campaignGridTemplate, resourceBundle, moduleImage='png']) mandatory indexed=no < 'x', 'l', 'r', 'mm', 'm--', '-m-', '--m', 'ms-', 'm-s', 'mss', 'sm-', '-ms', 'sms', 's-m', '-sm', 'ssm', 's---', '-s--', '--s-', '---s', 'ss--', 's-s-', 's--s', '-ss-', '-s-s', '--ss', 'sss-', 'ss-s', 's-ss', '-sss', 'ssss'
+
+[ercnt:campaignSearchFlow] > jnt:content, ercmix:businessComponents
+    + searchFormContent (jnt:contentList)
+
+[ercnt:campaignDestinationFilter] > jnt:content, ercmix:businessComponents
+
+[ercnt:campaignBestDeal] > jnt:content, ercmix:iconTitleList, ercmix:businessComponents
+    - campaign (weakreference, picker[type='campaign']) i18n mandatory
+    
+[ercmix:withoutExternalSeparator] mixin
+    itemtype=layout
+  - withoutExternalSeparator (boolean) = false  
+
+[ercmix:responsiveBehavior] mixin
+    itemtype=layout
+	extends=jnt:navMenuText,jnt:externalLink,ercnt:footerNavMenu
+    - hideOnMobile (boolean) = true i18n
+
+/**
+ * Component Icon + Titre
+ */
+[ercmix:iconTitleList] > mix:title, jmix:editorialContent,ercmix:withoutExternalSeparator mixin
+	- hnTitleTag (string, choicelist) = 'H2' mandatory < 'H2', 'H3', 'H4', 'H5', 'H6'
+	- icon (string, choicelist) < 'good-to-know-icon', 'interest-icon', 'location-icon', 'medal-icon', 'nearby-facilities-icon', 'peggy-bank-icon', 'phone-icon', 'services-icon', 'top-cities-icon','vehicles-icon', 'opening-hours-icon', 'message-from-the-staff-icon'
+
+[ercmix:shortCutItem] mixin
+	extends=ercmix:iconTitleList
+	- shortTitle (string) i18n mandatory
+
+[ercnt:iconTitleList] > jnt:contentList, ercmix:iconTitleList, ercmix:businessComponents
+    - jcr:title (string) i18n mandatory
+    
+
+[ercnt:visualMainContent] > jnt:content, ercmix:businessComponents
+	- titleContent (string) i18n
+	- description (string) i18n
+    - image (weakreference, picker[type='image']) i18n
+
+[ercnt:meganav] > jnt:content, ercmix:businessComponents
+    - logo (weakreference, picker[type='image'])
+    - logoAlt (string) i18n mandatory
+	+ headerSup (ercnt:headerSup) = ercnt:headerSup autocreated
+	+ headerInf (ercnt:headerInf) = ercnt:headerInf autocreated
+	
+[ercnt:headerSup] > jnt:navMenu, ercmix:businessComponents
+	- j:baselineNode (string) = 'home' nofulltext hidden
+ 	- j:maxDepth (long) = 2 hidden
+ 	- j:startLevel (long) = 0 hidden
+ 	- j:menuItemView (string) = menuElement nofulltext hidden
+
+[ercnt:headerInf] > jnt:navMenu, ercmix:businessComponents
+	- j:baselineNode (string) = 'home' nofulltext hidden
+ 	- j:maxDepth (long) = 2 hidden
+ 	- j:startLevel (long) = 0 hidden
+ 	- j:menuItemView (string) = menuElement nofulltext hidden
+
+[ercnt:footerTop] > jnt:contentList, ercmix:businessComponents
+	+ * (ercnt:footerNavMenu)
+
+[ercnt:footerNavMenu] > jnt:navMenu, ercmix:businessComponents
+	- j:baselineNode (string,choicelist) = 'home' nofulltext < 'home', 'currentPage'
+ 	- j:maxDepth (long) = 2
+ 	- j:startLevel (long) = 0
+ 	- j:menuItemView (string,choicelist[templates='jmix:navMenuItem,menuItem',resourceBundle,image]) = menuElement nofulltext
+    - hiddenTitle (boolean)
+    
+[ercnt:footerDevices] > jnt:content, ercmix:businessComponents
+	 - ituneLink (string) i18n
+	 - ipadLink (string) i18n
+	 - androidLink (string) i18n
+	 - devicesDesc (string, textarea) i18n
+	 + footerDeviceMoreInfo (ercnt:footerDeviceMoreInfo) = ercnt:footerDeviceMoreInfo autocreated
+	 + footerDeviceRight (ercnt:footerDeviceRight) = ercnt:footerDeviceRight autocreated
+
+[ercnt:footerDeviceMoreInfo] > jnt:navMenu, ercmix:businessComponents,jmix:hiddenType
+	- j:baselineNode (string,choicelist) = 'home' nofulltext < 'home', 'currentPage'
+ 	- j:maxDepth (long) = 2
+ 	- j:startLevel (long) = 0
+ 	- j:menuItemView (string,choicelist[templates='jmix:navMenuItem,menuItem',resourceBundle,image]) = menuElement nofulltext
+
+[ercnt:footerDeviceRight] > jnt:navMenu, ercmix:businessComponents,jmix:hiddenType
+	- j:baselineNode (string,choicelist) = 'home' nofulltext < 'home', 'currentPage'
+ 	- j:maxDepth (long) = 2
+ 	- j:startLevel (long) = 0
+ 	- j:menuItemView (string,choicelist[templates='jmix:navMenuItem,menuItem',resourceBundle,image]) = menuElement nofulltext
+
+[ercnt:footerSocialNetworks] > jnt:content, ercmix:businessComponents
+	- blogEuropcarLink (string) i18n
+	- facebookLink (string) i18n
+	- twitterLink (string) i18n
+	- googlePlusLink (string) i18n hidden
+	- linkedinLink (string) i18n
+
+[ercnt:programLevel] > jnt:contentFolder, ercmix:businessComponents
+    - name (string) mandatory
+    - code (string) mandatory
+    - rank (long) mandatory indexed=no
+    - maxNbrRentalToGet (long) indexed=no
+    - maxNbrRentalDayToGet (long) indexed=no
+    + * (ercnt:programAdvantage)
+
+[ercnt:programAdvantage] > jnt:content, ercmix:businessComponents, jmix:publication
+    - description (string) i18n mandatory
+    - tooltip (string) i18n
+
+[ercnt:customerCallCenter] > jnt:content, ercmix:businessComponents
+ - countryCode (string) mandatory
+ - text (string, richtext) i18n mandatory
+ - emailAddress (string) i18n
+    
+[ercnt:externalLinkI18n] > jnt:externalLink, ercmix:businessComponents
+	- j:url (string) i18n mandatory
+
+[ercnt:nodeLinkI18n] > jnt:nodeLink, ercmix:businessComponents
+ - j:node (weakreference,picker[type='editoriallink']) i18n < jmix:droppableContent, jmix:editorialContent, jnt:page, jnt:contentFolder, jnt:folder
+ 
+[geomix:geoComponents] > jmix:droppableContent mixin
+
+[geomix:filterableItem] mixin
+
+[geomix:filterItem] mixin
+
+[geomix:itemFolder] > mix:title, geomix:filterItem, geomix:filterableItem, jmix:siteContent, jmix:publication, ercmix:nameNotEditable mixin
+    - code (string) mandatory protected
+    - name (string) i18n mandatory protected
+
+[geomix:landingPage] > jmix:editorialContent, jmix:publication, ercmix:nameNotEditable mixin
+    - pageTitle (string) i18n
+    - mainTitle (string) i18n
+    - introduction (string, textarea) i18n
+    - landingImage (weakreference, picker[type=image])
+    - altLandingImage (string) i18n
+
+[geomix:landingPageWithVehicleType] mixin
+    - vehicleType (string) mandatory protected < 'CAR', 'VAN'
+
+[geomix:stationLandingPage] mixin
+	- descriptionAirPort (string,textarea) i18n itemtype = metadata
+    - descriptionPort (string,textarea) i18n itemtype = metadata
+	- descriptionRailway (string,textarea) i18n itemtype = metadata
+
+[geomix:contentArea] mixin
+    orderable
+    
+[geomix:linkInterestYou] mixin
+
+/* Deprecated */
+[geomix:navMenuTextLink] > geomix:geoNodeLink, jmix:hiddenType mixin
+ 	- internalLinkI18 (weakreference, picker[type='editoriallink']) i18n < jmix:droppableContent, jnt:page
+ 	- externalLinkI18 (string) i18n
+ 	- geoNode (weakreference, picker[type='geocontent']) indexed=no
+
+[geomix:geoLink] > jmix:hiddenType mixin
+ 	- geoNode (weakreference, picker[type='geocontent']) indexed=no
+
+/* Deprecated */
+[geomix:geoNodeLink] > jmix:hiddenType mixin
+ 	- geoNode (weakreference, picker[type='geocontent']) indexed=no
+
+/********************************************************************************************
+ * Contenu par défaut
+ *******************************************************************************************/
+
+[geomix:defaultContentArea] > geomix:contentArea mixin
+
+[geomix:defaultLandingPage] > geomix:landingPage mixin
+	+ blocksZone (geomix:defaultContentArea) = geont:defaultContentBlocksZone autocreated
+	+ bookingZone (geomix:defaultContentArea) = geont:defaultContentBookingZone autocreated
+
+[geont:defaultContentBlocksZone] > jnt:content, geomix:defaultContentArea
+    + * (jnt:bigText)
+    + * (jnt:imageReferenceLink)
+    + * (geont:displayIntroduction)
+    + * (geont:displayMap)
+    + * (geont:displayStationAddress)
+    + * (geont:displayStationPhone)
+    + * (geont:displayStationServices)
+    + * (geont:displayStationItinerary)
+    + * (geont:displayStationHowToFindStation)
+    + * (geont:displayStationVehiclesAvailable)
+    + * (geont:displayStationMessageFromStaff)
+    + * (bootstrap3nt:row)
+    + * (jnt:contentList)
+    + * (ercnt:visualMainContent)
+    + * (geont:thisMightInterestYou)
+    + * (geont:displayStationNearbyFacilities)
+    + * (geont:topStations)
+    + * (geont:topCities)
+	+ * (geont:topCountries)
+	+ * (geont:topRegions)
+	+ * (geont:displayStationOpenHours)
+	+ * (geont:geoLinkList)
+
+[geont:defaultContentBookingZone] > jnt:content, geomix:defaultContentArea
+    + * (ercnt:appBookingPod)
+
+[geont:defaultLandingPageFolder] > jnt:content, mix:title, geomix:geoComponents, jmix:studioOnly, ercmix:nameNotEditable
+    + * (geomix:defaultLandingPage)
+
+[geont:defaultCountry] > jnt:content, mix:title, geomix:defaultLandingPage, geomix:geoComponents
+
+[geont:defaultRegion] > jnt:content, mix:title, geomix:defaultLandingPage, geomix:geoComponents
+
+[geont:defaultCity] > jnt:content, mix:title, geomix:defaultLandingPage, geomix:geoComponents
+
+[geont:defaultStation] > jnt:content, mix:title, geomix:stationLandingPage, geomix:defaultLandingPage, geomix:geoComponents
+
+/********************************************************************************************
+ * Contenu adaptatif
+ *******************************************************************************************/
+
+[geomix:adaptiveContentArea] > geomix:contentArea mixin
+
+[geomix:adaptiveLandingPage] > geomix:landingPage mixin
+
+[geont:adaptiveContentBlocksZone] > jnt:content, geomix:adaptiveContentArea
+    + * (geont:adaptiveContent)
+
+[geont:adaptiveContentBookingZone] > jnt:content, geomix:adaptiveContentArea
+/* ajouté un fils quand le composant du booking sera dispo */
+
+[geont:adaptiveRegion] > jnt:content, mix:title, geomix:adaptiveLandingPage, geomix:landingPageWithVehicleType, geomix:geoComponents
+	+ blocksZone (geomix:adaptiveContentArea) = geont:adaptiveContentBlocksZone autocreated
+	+ bookingZone (geomix:adaptiveContentArea) = geont:adaptiveContentBookingZone autocreated
+
+[geont:adaptiveCity] > jnt:content, mix:title, geomix:adaptiveLandingPage, geomix:landingPageWithVehicleType, geomix:geoComponents
+	+ blocksZone (geomix:adaptiveContentArea) = geont:adaptiveContentBlocksZone autocreated
+	+ bookingZone (geomix:adaptiveContentArea) = geont:adaptiveContentBookingZone autocreated
+
+[geont:adaptiveStation] > jnt:content, mix:title, geomix:stationLandingPage, geomix:adaptiveLandingPage, geomix:geoComponents
+	+ blocksZone (geomix:adaptiveContentArea) = geont:adaptiveContentBlocksZone autocreated
+	+ bookingZone (geomix:adaptiveContentArea) = geont:adaptiveContentBookingZone autocreated
+
+[geont:adaptiveContent] > jnt:content, jmix:editorialContent, jmix:bindedComponent, geomix:geoComponents
+    - action (string, choicelist) = 'override' < 'insert_before','override','insert_after'
+    + * (jnt:bigText)
+    + * (jnt:imageReferenceLink)
+    + * (geont:displayIntroduction)
+    + * (geont:displayMap)
+    + * (geont:displayStationAddress)
+    + * (geont:displayStationPhone)
+    + * (geont:displayStationServices)
+    + * (geont:displayStationHowToFindStation)
+    + * (geont:displayStationVehiclesAvailable)
+    + * (geont:displayStationMessageFromStaff)
+    + * (geont:displayStationItinerary)
+    + * (bootstrap3nt:row)
+    + * (jnt:contentList)
+    + * (ercnt:visualMainContent)
+    + * (geont:thisMightInterestYou)
+    + * (geont:displayStationNearbyFacilities)
+    + * (geont:topStations)
+    + * (geont:topCities)
+    + * (geont:topCountries)
+	+ * (geont:topRegions)
+    + * (geont:displayStationOpenHours)
+    + * (geont:geoLinkList)
+
+
+/********************************************************************************************
+ * Contenu specifique
+ *******************************************************************************************/
+
+[geomix:specificContentArea] > geomix:contentArea mixin
+
+[geomix:specificLandingPage] > geomix:landingPage, ercmix:canBeFlushInVarnish mixin
+
+[geomix:specificLandingPageWithVehicleType] > geomix:specificLandingPage, geomix:landingPageWithVehicleType mixin
+
+[geont:specificContentBlocksZone] > jnt:content, geomix:specificContentArea
+    + * (geont:specificContent)
+
+[geont:specificContentBookingZone] > jnt:content, geomix:specificContentArea
+/* ajouté un fils quand le composant du booking sera dispo */
+
+[geont:specificContent] > jnt:content, jmix:editorialContent, jmix:bindedComponent, geomix:geoComponents
+    - action (string, choicelist[resourceBundle]) = 'override' < 'insert_before','override','insert_after'
+    + * (jnt:bigText)
+    + * (jnt:imageReferenceLink)
+    + * (geont:displayIntroduction)
+    + * (geont:displayMap)
+    + * (geont:displayStationAddress)
+    + * (geont:displayStationPhone)
+    + * (geont:displayStationServices)
+    + * (geont:displayStationHowToFindStation)
+    + * (geont:displayStationVehiclesAvailable)
+    + * (geont:displayStationMessageFromStaff)
+    + * (geont:displayStationItinerary)
+    + * (bootstrap3nt:row)
+    + * (jnt:contentList)
+    + * (ercnt:visualMainContent)
+    + * (geont:thisMightInterestYou)
+    + * (geont:displayStationNearbyFacilities)
+    + * (geont:topStations)
+    + * (geont:topCities)
+    + * (geont:topCountries)
+    + * (geont:topRegions)
+    + * (geont:displayStationOpenHours)
+    + * (geont:geoLinkList)
+
+/********************************************************************************************
+ * Arborescence des donnees
+ *******************************************************************************************/
+[geont:worldwide] > jnt:content, geomix:specificLandingPage, jmix:siteContent, geomix:geoComponents, jmix:studioOnly
+    - introduction (string, richtext) i18n
+	+ blocksZone (jnt:contentList) = jnt:contentList autocreated
+	+ bookingZone (jnt:contentList) = jnt:contentList autocreated
+	+ * (geont:continentFolder)
+
+[geont:continentFolder] > jnt:content, geomix:itemFolder
+    orderable
+	+ * (geont:countryFolder)
+
+[geont:countryFolder] > jnt:content, geomix:itemFolder, ercmix:displayPurgeVarnishUnderNode
+    orderable
+	+ * (geont:country)
+	+ * (geont:regionFolder)
+	+ * (geont:cityGroup)
+	+ * (geont:adaptiveRegion)
+	+ * (geont:adaptiveCity)
+	+ * (geont:adaptiveStation)
+
+[geont:regionFolder] > jnt:content, geomix:itemFolder, ercmix:displayPurgeVarnishUnderNode
+    orderable
+    + * (geont:region)
+	+ * (geont:cityFolder)
+	+ * (geont:adaptiveCity)
+	+ * (geont:adaptiveStation)
+
+[geont:cityGroup] > jnt:content, jmix:siteContent, geomix:filterItem, ercmix:displayPurgeVarnishUnderNode, ercmix:nameNotEditable
+    orderable
+    + * (geont:cityFolder)
+
+[geont:cityFolder] > jnt:content, geomix:itemFolder, ercmix:displayPurgeVarnishUnderNode
+    orderable
+    + * (geont:city)
+    + * (geont:station)
+	+ * (geont:adaptiveStation)
+
+[geont:country] > jnt:content, geomix:specificLandingPageWithVehicleType, mix:title, jmix:hasIcon
+    orderable
+    - j:icon (weakreference) hidden
+    - code (string) mandatory protected
+    - name (string) i18n mandatory protected
+    - continentCode (string) mandatory protected
+    - latitude (double) mandatory protected
+    - longitude (double) mandatory protected
+    - scoring_car (double) protected
+    - scoring_van (double) protected
+    - scoring_all (double) protected
+	+ blocksZone (geomix:specificContentArea) = geont:specificContentBlocksZone autocreated
+	+ bookingZone (geomix:specificContentArea) = geont:specificContentBookingZone autocreated
+
+[geont:region] > jnt:content, geomix:specificLandingPageWithVehicleType, mix:title, jmix:hasIcon
+    orderable
+    - j:icon (weakreference) hidden
+    - code (string) mandatory protected
+    - name (string) i18n mandatory protected
+    - continentCode (string) mandatory protected
+    - countryCode (string) mandatory protected
+    - latitude (double) mandatory protected
+    - longitude (double) mandatory protected
+    - scoring_car (double) protected
+    - scoring_van (double) protected
+    - scoring_all (double) protected
+	+ blocksZone (geomix:specificContentArea) = geont:specificContentBlocksZone autocreated
+	+ bookingZone (geomix:specificContentArea) = geont:specificContentBookingZone autocreated
+
+[geont:city] > jnt:content, geomix:specificLandingPageWithVehicleType, mix:title, jmix:hasIcon
+    orderable
+    - j:icon (weakreference) hidden
+    - code (string) mandatory protected
+    - name (string) i18n mandatory protected
+    - continentCode (string) mandatory protected
+    - countryCode (string) mandatory protected
+    - regionCode (string) protected
+    - latitude (double) mandatory protected
+    - longitude (double) mandatory protected
+    - scoring_car (double) protected
+    - scoring_van (double) protected
+    - scoring_all (double) protected
+    - nearbyCities (string) multiple protected
+	+ blocksZone (geomix:specificContentArea) = geont:specificContentBlocksZone autocreated
+	+ bookingZone (geomix:specificContentArea) = geont:specificContentBookingZone autocreated
+
+[geont:station] > jnt:content, geomix:specificLandingPage, jmix:droppableContent, geomix:filterableItem, mix:title, jmix:hasIcon
+    - j:icon (weakreference) hidden
+    - code (string) mandatory protected
+    - name (string) i18n mandatory protected
+    - continentCode (string) mandatory protected
+    - countryCode (string) mandatory protected
+    - regionCode (string) protected
+    - cityCode (string) mandatory protected
+    - stationType (string) mandatory protected < 'AIRPORT', 'PORT', 'RAILWAY', 'DOWNTOWN'
+    - vehicleType (string) multiple mandatory protected < 'CAR', 'VAN'
+    - latitude (double) protected
+    - longitude (double) protected
+    - addrStreetLines (string) multiple protected
+    - addrAdditionalInfo (string) protected
+    - addrPostCode (string) protected
+    - addrCity (string) protected
+    - addrCountryCode (string) protected
+    - addrCountry (string) protected
+    - scoring_car (double) protected
+    - scoring_van (double) protected
+    - scoring_all (double) protected
+    - nearbyCities (string) multiple protected
+    - dropOff247 (boolean) protected
+    + additionalInfo (geont:additionalInfo) = geont:additionalInfo
+    + openHours (geont:openHours)
+    + exceptionalHours (geont:exceptionalHours)
+	+ blocksZone (geomix:specificContentArea) = geont:specificContentBlocksZone autocreated
+	+ bookingZone (geomix:specificContentArea) = geont:specificContentBookingZone autocreated
+	+ * (geont:phone)
+	+ * (geont:service)
+
+[geont:phone] > jnt:content
+    - type (string) mandatory protected
+    - mainIndicator (boolean) mandatory protected
+    - phoneNumber (string) mandatory protected
+    - phoneNumberFormatted (string) hidden protected
+
+[geont:service] > jnt:content
+    - code (string) mandatory protected
+    - name (string) mandatory protected i18n
+    - displayOrder (long) protected
+
+[geont:vehiclesAvailable] > jnt:content
+    - code (string) mandatory protected
+    - name (string) mandatory protected i18n
+
+[geont:nearbyFacilities] > jnt:content
+ 	-code (string) mandatory protected
+ 	-name (string) mandatory protected i18n
+ 	-description (string) protected
+ 	-distance (Double) protected
+
+[geont:messageFromStaff] > jnt:content
+    - startDate (date) protected
+	- endDate (date) protected
+	- information (string) mandatory protected i18n
+	+ author (geont:author)
+
+[geont:author] > jnt:content
+	- name (string) protected
+    - role (string) mandatory protected i18n
+
+[geont:additionalInfo] > jnt:content
+	- howToFindStationTranslations (string) protected i18n
+	+ * (geont:vehiclesAvailable)
+	+ * (geont:nearbyFacilities)
+	+ messageFromStaff (geont:messageFromStaff)
+
+[geont:displayStationAddress] > jnt:content, geomix:geoComponents
+
+[geont:displayStationPhone] > jnt:content, geomix:geoComponents
+
+[geont:displayStationServices] > jnt:content, ercmix:iconTitleList, geomix:geoComponents
+
+[geont:displayStationNearbyFacilities] > jnt:content, ercmix:iconTitleList, geomix:geoComponents
+
+[geont:displayStationVehiclesAvailable] > jnt:content, ercmix:iconTitleList, geomix:geoComponents
+
+[geont:displayStationHowToFindStation] > jnt:content, ercmix:iconTitleList, geomix:geoComponents
+
+[geont:displayStationMessageFromStaff] > jnt:content, ercmix:iconTitleList, geomix:geoComponents
+
+[geont:displayStationItinerary] > jnt:content, geomix:geoComponents
+
+[geont:displayMap] > jnt:content, geomix:geoComponents
+
+[geont:displayIntroduction] > jnt:content, geomix:geoComponents
+
+[geont:thisMightInterestYou] > jnt:content, ercmix:iconTitleList, geomix:geoComponents
+    orderable
+    - jcr:title (string) i18n mandatory
+	+ linkToOtherBranch (jmix:link) = geont:linkToOtherBranch autocreated
+	+ * (geont:linkReference)
+
+[geont:linkToOtherBranch] > jnt:content, jmix:link, geomix:linkInterestYou
+
+[geont:linkReference] > jnt:content, jmix:link, geomix:geoComponents, geomix:linkInterestYou
+    - jcr:title (string) i18n hidden
+    - node (weakreference, picker[type='geocontent']) mandatory indexed=no
+
+[geont:stationVehicleTypeCondition] > jnt:condition
+    - reverse (boolean)
+    - vehicleTypes (string, choicelist) multiple < 'CAR', 'VAN'
+
+[geont:stationTypeCondition] > jnt:condition
+    - reverse (boolean)
+    - stationTypes (string, choicelist) multiple < 'AIRPORT', 'PORT', 'RAILWAY', 'DOWNTOWN'
+
+[geont:openHours] > jnt:content
+	+ * (geont:hour) = geont:hour
+
+[geont:exceptionalHours] > jnt:content
+	+ * (geont:hour) = geont:hour
+
+[geont:hour] > jnt:content
+    - day (long) mandatory
+	- businessType (string) mandatory
+	- startHour (date) mandatory
+	- endHour (date) mandatory
+	- closed (boolean)
+
+[geont:topStations] > jnt:content, ercmix:iconTitleList, geomix:geoComponents
+	- vehicleType (string, choicelist) hidden < 'CAR', 'VAN' 
+	- labelMoreLocation (string) i18n
+	- * (string)
+	
+[geont:topCities] > jnt:content, ercmix:iconTitleList, geomix:geoComponents
+	- vehicleType (string, choicelist) < 'CAR', 'VAN'
+	- countryCode (string, choicelist[geoCountryCodes])
+	- * (string)
+
+[geont:topCountries] > jnt:content, ercmix:iconTitleList, geomix:geoComponents
+	- continentCode (string, choicelist[geoContinentCodes])
+	- * (string)
+
+[geont:geoLinkList] > jnt:content, ercmix:iconTitleList, geomix:geoComponents
+	+ * (geont:linkReference)
+
+[geont:topRegions] > jnt:content, ercmix:iconTitleList, geomix:geoComponents
+	- * (string)	
+
+[geont:displayStationOpenHours] > jnt:content, ercmix:iconTitleList, geomix:geoComponents
