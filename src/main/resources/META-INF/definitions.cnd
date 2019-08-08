@@ -418,9 +418,9 @@ orderable
  - hotelCode (string)
  - dailyAmenityFee (string)
  - page (weakreference, picker[type='page']) mandatory i18n
- - destinationPage (weakreference, picker[type='page']) i18n < 'aahmix:destinationPage'
+ - destinationPage (weakreference, picker[type='page']) i18n
  - roomsLandingPage (weakreference, picker[type='page'])
- - brand (weakreference, picker[type='editorial']) < 'aah:brand'
+ - brand (weakreference, picker[type='editorial'])
  - url (string)
  - urlPortal (string)
  - checkInTime (string)
@@ -433,7 +433,7 @@ orderable
  - numberOfElevators (long)
  - numberOfFloors (long)
  - tatLink (string)
- - groupTypes (weakreference, picker[type='editorial']) multiple < 'aah:groupType'
+ - groupTypes (weakreference, picker[type='editorial']) multiple
  + amenities (aah:amenitiesList) = aah:amenitiesList autocreated
  + * (aah:roomType)
 
@@ -1607,27 +1607,27 @@ orderable
 
 [geont:station] > jnt:content, geomix:specificLandingPage, jmix:droppableContent, geomix:filterableItem, mix:title, jmix:hasIcon
     - j:icon (weakreference) hidden
-    - code (string) mandatory protected
-    - name (string) i18n mandatory protected
-    - continentCode (string) mandatory protected
-    - countryCode (string) mandatory protected
-    - regionCode (string) protected
-    - cityCode (string) mandatory protected
-    - stationType (string) mandatory protected < 'AIRPORT', 'PORT', 'RAILWAY', 'DOWNTOWN'
-    - vehicleType (string) multiple mandatory protected < 'CAR', 'VAN'
-    - latitude (double) protected
-    - longitude (double) protected
-    - addrStreetLines (string) multiple protected
-    - addrAdditionalInfo (string) protected
-    - addrPostCode (string) protected
-    - addrCity (string) protected
-    - addrCountryCode (string) protected
-    - addrCountry (string) protected
-    - scoring_car (double) protected
-    - scoring_van (double) protected
-    - scoring_all (double) protected
-    - nearbyCities (string) multiple protected
-    - dropOff247 (boolean) protected
+    - code (string) ='58458454vv' mandatory protected
+    - name (string) i18n mandatory
+    - continentCode (string) mandatory
+    - countryCode (string) mandatory
+    - regionCode (string)
+    - cityCode (string) mandatory
+    - stationType (string) mandatory  < 'AIRPORT', 'PORT', 'RAILWAY', 'DOWNTOWN'
+    - vehicleType (string) multiple mandatory  < 'CAR', 'VAN'
+    - latitude (double)
+    - longitude (double)
+    - addrStreetLines (string) multiple
+    - addrAdditionalInfo (string)
+    - addrPostCode (string)
+    - addrCity (string)
+    - addrCountryCode (string)
+    - addrCountry (string)
+    - scoring_car (double)
+    - scoring_van (double)
+    - scoring_all (double)
+    - nearbyCities (string) multiple
+    - dropOff247 (boolean)
     + additionalInfo (geont:additionalInfo) = geont:additionalInfo
     + openHours (geont:openHours)
     + exceptionalHours (geont:exceptionalHours)
