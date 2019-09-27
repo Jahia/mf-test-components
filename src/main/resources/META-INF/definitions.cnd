@@ -17,10 +17,6 @@
 
 [jnt:persotest] > jnt:content, jmix:droppableContent, jmix:basicContent
  - text (string)
-
-[jnt:navMenu] > nt:base
-
-[fcnt:formDisplay] > nt:base
   
 [jnt:choiceType] > jnt:content, jmix:editorialContent, jmix:structuredContent
  - choiceField (string) mandatory
