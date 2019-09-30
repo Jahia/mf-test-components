@@ -4,8 +4,8 @@
 <j = 'http://www.jahia.org/jahia/1.0'>
 <jmix = 'http://www.jahia.org/jahia/mix/1.0'>
 <jnt = 'http://www.jahia.org/jahia/nt/1.0'>
-<bootstrap3mix = ’http://www.jahia.org/bootstrap3/mix/1.0'>
-<bootstrap3nt = ‘http://www.jahia.org/bootstrap3/nt/1.0’>
+<bootstrap3mix = 'http://www.jahia.org/bootstrap3/mix/1.0'>
+<bootstrap3nt = 'http://www.jahia.org/bootstrap3/nt/1.0'>
 <geo = 'http://www.europcar.com/europcar/geo/1.0'>
 <geomix = 'http://www.europcar.com/europcar/geo/mix/1.0'>
 <geont = 'http://www.europcar.com/europcar/geo/nt/1.0'>
