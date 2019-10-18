@@ -62,9 +62,9 @@
     <description>This is the custom module (mf-test-components) for running on a Digital Experience Manager server.</description>
 
     <scm>
-        <connection>scm:git:git@github.com:Jahia/qa-apps.git</connection>
-        <developerConnection>scm:git:git@github.com:Jahia/qa-apps.git</developerConnection>
-        <url>https://github.com/Jahia/qa-apps/tree/master/mf-test-components</url>
+        <connection>scm:git:git@github.com:Jahia/mf-test-components.git</connection>
+        <developerConnection>scm:git:git@github.com:Jahia/mf-test-components.git</developerConnection>
+        <url>https://github.com/Jahia/mf-test-components</url>
     </scm>
 
     <repositories>
