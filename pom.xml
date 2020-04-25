@@ -21,12 +21,12 @@
     </parent>
     <artifactId>mf-test-components</artifactId>
     <name>mf-test-components</name>
-    <version>1.0-SNAPSHOT</version>
+    <version>2.0.0-SNAPSHOT</version>
     <packaging>bundle</packaging>
     <description>This is the custom module (mf-test-components) for running on a Digital Experience Manager server.</description>
 
     <properties>
-        <jahia-module-signature>MCwCFDOcg8Hi3kOMR7l/aV5B3XzTYFDFAhRMiKbfcdYojZfEIyhWkccM+0T/9g==</jahia-module-signature>
+        <jahia-module-signature>MCwCFD6X+TKHyIYhi9Dfz8bpa4TTWBoPAhRuGshgob/gzWsuALmttc54hw87pA==</jahia-module-signature>
     </properties>
     <scm>
         <connection>scm:git:git@github.com:Jahia/mf-test-components.git</connection>
